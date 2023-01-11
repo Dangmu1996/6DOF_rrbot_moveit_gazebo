@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<robot name="gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find gripper_description)/urdf/gripper.gazebo" />
+
+    <xacro:property name="gripper_base_height" value="0.2"/>
+    <xacro:property name="finger_width" value="0.05"/>
+    <xacro:property name="finger_height" value="0.2"/>
+
+    <link name="gripper_base_link">
+        <collision>
+            <origin xyz="0 0 ${gripper_base_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${width} ${width} ${gripper_base_height}"/>
+            </geometry>
+        </collision>
+      
+        <visual>
+            <origin xyz="0 0 ${gripper_base_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${width} ${width} ${gripper_base_height}"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 ${gripper_base_height/2}" rpy="0 0 0"/>
+            <mass value="0.002"/>
+            <inertia
+            ixx="${mass / 12.0 * (width*width + gripper_base_height*gripper_base_height)}" ixy="0.0" ixz="0.0"
+            iyy="${mass / 12.0 * (gripper_base_height*gripper_base_height + width*width)}" iyz="0.0"
+            izz="${mass / 12.0 * (width*width + width*width)}"/>
+        </inertial>
+    </link>
+
+    <joint name="gripper_base_to_finger_right" type="continuous">
+        <parent link="gripper_base_link"/>
+        <child link="finger_right"/>
+        <origin xyz="0 0 ${gripper_base_height}" rpy="0 0 0"/>
+        <axis xyz ="1 0 0"/>
+    </joint>
+
+    <link name="finger_right">
+        <collision>
+            <origin xyz="0 ${width} ${finger_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height}"/>
+            </geometry>
+        </collision>
+      
+        <visual>
+            <origin xyz="0 ${width} ${finger_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 ${width} ${finger_height/2}" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia
+            ixx="${mass / 12.0 * (finger_width*finger_width + finger_height*finger_height)}" ixy="0.0" ixz="0.0"
+            iyy="${mass / 12.0 * (finger_height*finger_height + finger_width*finger_width)}" iyz="0.0"
+            izz="${mass / 12.0 * (finger_width*finger_width + finger_width*finger_width)}"/>
+        </inertial>
+    </link>
+
+    <joint name="gripper_base_to_finger_left" type="continuous">
+        <parent link="gripper_base_link"/>
+        <child link="finger_left"/>
+        <origin xyz="0 0 ${gripper_base_height}" rpy="0 0 0"/>
+        <axis xyz ="-1 0 0"/>
+    </joint>
+
+
+    <link name="finger_left">
+        <collision>
+            <origin xyz="0 ${-width} ${finger_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height}"/>
+            </geometry>
+        </collision>
+      
+        <visual>
+            <origin xyz="0 ${-width} ${finger_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height}"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 ${-width} ${finger_height/2}" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia
+            ixx="${mass / 12.0 * (finger_width*finger_width + finger_height*finger_height)}" ixy="0.0" ixz="0.0"
+            iyy="${mass / 12.0 * (finger_height*finger_height + finger_width*finger_width)}" iyz="0.0"
+            izz="${mass / 12.0 * (finger_width*finger_width + finger_width*finger_width)}"/>
+        </inertial>
+    </link>
+
+    <joint name="finger_left_to_finger_left_tip" type="fixed">
+        <parent link="finger_left"/>
+        <child link="finger_left_tip"/>
+        <origin xyz="0 0 ${finger_height}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="finger_left_tip">
+        <collision>
+            <origin xyz="0 ${-finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height/2}"/>
+            </geometry>
+        </collision>
+      
+        <visual>
+            <origin xyz="0 ${-finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height/2}"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 ${-finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia
+            ixx="${mass / 12.0 * (finger_width*finger_width + finger_height/2*finger_height/2)}" ixy="0.0" ixz="0.0"
+            iyy="${mass / 12.0 * (finger_height/2*finger_height/2 + finger_width*finger_width)}" iyz="0.0"
+            izz="${mass / 12.0 * (finger_width*finger_width + finger_width*finger_width)}"/>
+        </inertial>
+    </link>
+
+    <joint name="finger_right_to_finger_right_tip" type="fixed">
+        <parent link="finger_right"/>
+        <child link="finger_right_tip"/>
+        <origin xyz="0 0 ${finger_height}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="finger_right_tip">
+        <collision>
+            <origin xyz="0 ${finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height/2}"/>
+            </geometry>
+        </collision>
+      
+        <visual>
+            <origin xyz="0 ${finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${finger_width} ${finger_width} ${finger_height/2}"/>
+            </geometry>
+            <material name="orange"/>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 ${finger_width} ${finger_height/4}" rpy="0 0 0"/>
+            <mass value="0.001"/>
+            <inertia
+            ixx="${mass / 12.0 * (finger_width*finger_width + finger_height/2*finger_height/2)}" ixy="0.0" ixz="0.0"
+            iyy="${mass / 12.0 * (finger_height/2*finger_height/2 + finger_width*finger_width)}" iyz="0.0"
+            izz="${mass / 12.0 * (finger_width*finger_width + finger_width*finger_width)}"/>
+        </inertial>
+    </link>
+
+    <transmission name="gripper_right">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="gripper_base_to_finger_right">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motorRight">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="gripper_left">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="gripper_base_to_finger_left">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motorLeft">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+</robot>

@@ -1,0 +1,24 @@
+<launch>
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <!--rosparam file="$(find rrbot_control)/config/rrbot_control.yaml" command="load"/-->
+  <arg name="controllers" default="gripper_joint_state_controller gripper_joint_position"/>
+  <rosparam file="$(find gripper_description)/config/gripper_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <!--node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+	output="screen" ns="/rrbot" args="joint_state_controller
+            joint0_position_controller
+					  joint1_position_controller
+            joint2_position_controller
+            joint3_position_controller
+            joint4_position_controller"/-->
+  <node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+	output="screen" args="$(arg controllers)"/>
+  
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+    <remap from="/joint_states" to="/rrbot/joint_states" />
+  </node> -->
+
+</launch>
