@@ -30,3 +30,8 @@ include_directories(
 
 add_executable(rrbot_move src/rrbot_move.cpp)
 target_link_libraries(rrbot_move ${catkin_LIBRARIES})
+
+catkin_install_python(PROGRAMS
+  scripts/rrbot_move_python.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

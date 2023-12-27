@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: changmin
     author_email: changmin@wego-robotics.com
-    generated_timestamp: 1645783044
+    generated_timestamp: 1703688846
